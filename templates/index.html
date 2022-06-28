@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block bodie %}
+<form method="POST">
+    <ul class="list-unstyled row justify-content-center" style="position: absolute; top: 20%; left: .5%;">
+        <li><input type="submit" name="submit" class="btn btn-primary mb-5 px-3"  value="сбросить фильтры"></input></li>
+        <li><input type="submit" name="decline" class="btn btn-primary px-3" value="отсеять нулевые показатели" ></li>
+    </ul>
+</form>
+
+<canvas id="myChart" width="400" height="400" style="max-height: 800px;"></canvas>
+<br><br><br>
+<script type="text/javascript">
+function getRandomColor() {
+            var letters = '0123456789ABCDEF'.split('');
+            var color = '#';
+            for (var i = 0; i < 6; i++ ) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+                }
+
+
+      new Chart(document.getElementById("myChart").getContext('2d'), {
+
+    type: 'bar',
+    data: {
+      labels: "{{labels}}".split("|"),
+      datasets: [
+        {
+          label: "Population (millions)",
+          backgroundColor: Array.from({length: 20}, (v, k) => getRandomColor()),
+          data: "{{values}}".split("|").map(Number)
+        }
+      ]
+    },
+    options: {
+         maintainAspectRatio: false,
+      legend: { display: false },
+      title: {
+        display: true,
+        text: 'выработка электроэнергии в испании за 4 года'
+      },
+      scales: {
+            xAxes: [{
+                ticks: {
+                    autoSkip: false,
+                    maxRotation: 90,
+                    minRotation: 90
+                }
+            }]
+        }
+    }
+});
+
+</script>
+<h2>вывод всех элементов</h2>
+{{items.len}}
+{% for i in items %}
+<div class="list-inline bg-light p-3 mb-3">
+    <h2 class="text-start ">{{i.name}}</h2>
+    <h2 class=" text-end">{{i.summary}}</h2>
+</div>
+
+{% endfor %}
+
+{% endblock %}
+
